@@ -5,10 +5,12 @@ NestJS + Prisma 7 + PostgreSQL (Neon) API for a library's book catalog.
 ## Setup
 
 1. `cd api && npm install`
-2. Copy `.env.example` to `.env` and set your real `DATABASE_URL`
-3. `npx prisma migrate dev`
-4. `npx prisma db seed`
+2. `cp .env.example .env` and set `DATABASE_URL` and `JWT_SECRET` in `api/.env`
+3. `npx prisma migrate deploy`
+4. `npx prisma generate && npm run seed`
 5. `npm run start:dev`
+
+See [api/README.md](api/README.md) for the Week 2 endpoint reference and Postman collection.
 
 ## Schema Decisions
 

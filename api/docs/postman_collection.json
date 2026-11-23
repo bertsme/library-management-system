@@ -1,0 +1,42 @@
+{
+  "info": {
+    "name": "Library Management System API",
+    "description": "Week 2 API: genres, books, registration, login, JWT authorization. Set baseUrl (default http://localhost:3000), genreId, bookId, and accessToken as collection variables.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "genreId", "value": "replace-with-genre-uuid" },
+    { "key": "bookId", "value": "replace-with-book-uuid" },
+    { "key": "accessToken", "value": "replace-with-jwt" }
+  ],
+  "item": [
+    {
+      "name": "Genres",
+      "item": [
+        { "name": "Create genre", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Mystery\",\n  \"description\": \"Mystery and detective fiction\"\n}" }, "url": "{{baseUrl}}/genres" } },
+        { "name": "List genres", "request": { "method": "GET", "url": "{{baseUrl}}/genres" } },
+        { "name": "Get genre", "request": { "method": "GET", "url": "{{baseUrl}}/genres/{{genreId}}" } },
+        { "name": "Update genre", "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"description\": \"Updated description\"\n}" }, "url": "{{baseUrl}}/genres/{{genreId}}" } },
+        { "name": "Delete genre", "request": { "method": "DELETE", "url": "{{baseUrl}}/genres/{{genreId}}" } }
+      ]
+    },
+    {
+      "name": "Books",
+      "item": [
+        { "name": "Create book (LIBRARIAN)", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"title\": \"The Example Book\",\n  \"author\": \"A. Writer\",\n  \"isbn\": \"9781234567890\",\n  \"totalCopies\": 4,\n  \"genreId\": \"{{genreId}}\"\n}" }, "url": "{{baseUrl}}/books" } },
+        { "name": "List books (filter/search/page)", "request": { "method": "GET", "url": "{{baseUrl}}/books?genreId={{genreId}}&search=writer&page=1&limit=10" } },
+        { "name": "Get book", "request": { "method": "GET", "url": "{{baseUrl}}/books/{{bookId}}" } },
+        { "name": "Update book (LIBRARIAN)", "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"totalCopies\": 6\n}" }, "url": "{{baseUrl}}/books/{{bookId}}" } },
+        { "name": "Delete book (LIBRARIAN)", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": "{{baseUrl}}/books/{{bookId}}" } }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        { "name": "Register (PATRON)", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Sample Patron\",\n  \"email\": \"patron@example.com\",\n  \"password\": \"correct-horse-123\"\n}" }, "url": "{{baseUrl}}/auth/register" } },
+        { "name": "Login", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"email\": \"patron@example.com\",\n  \"password\": \"correct-horse-123\"\n}" }, "url": "{{baseUrl}}/auth/login" } }
+      ]
+    }
+  ]
+}

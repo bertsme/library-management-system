@@ -23,6 +23,44 @@
 
 ## Description
 
+NestJS + Prisma 7 + PostgreSQL (Neon) API for a library's book catalog.
+
+## Week 2 API
+
+Copy `.env.example` to `.env`, then set `DATABASE_URL` and a strong `JWT_SECRET` there (never commit `.env`). Apply the checked-in additive migration and generate the client:
+
+```bash
+npm install
+npx prisma migrate deploy
+npx prisma generate
+npm run start:dev
+```
+
+For a fresh local database, `npx prisma migrate dev` can create/apply migrations; `npm run seed` adds sample genres and books. No migration has been applied to a database as part of this implementation.
+
+The API listens on port 3000 by default and enables CORS. Global validation rejects unknown body fields. Import `docs/postman_collection.json` into Postman and set its variables.
+
+### Endpoints
+
+| Method | Path | Access | Purpose |
+| --- | --- | --- | --- |
+| POST | `/genres` | Public | Create genre (`name`, optional `description`) |
+| GET | `/genres` | Public | List genres |
+| GET | `/genres/:id` | Public | Get genre |
+| PATCH | `/genres/:id` | Public | Update genre |
+| DELETE | `/genres/:id` | Public | Delete genre; returns conflict if books still reference it |
+| GET | `/books?genreId=&search=&page=1&limit=10` | Public | Filter by genre, search title/author, paginate |
+| GET | `/books/:id` | Public | Get book |
+| POST | `/books` | LIBRARIAN | Create book |
+| PATCH | `/books/:id` | LIBRARIAN | Update book |
+| DELETE | `/books/:id` | LIBRARIAN | Delete book |
+| POST | `/auth/register` | Public | Create a PATRON account, hash password, return JWT |
+| POST | `/auth/login` | Public | Verify password and return JWT |
+
+Book create requires `title`, `author`, `isbn`, nonnegative integer `totalCopies`, and UUID `genreId`. Search is case-insensitive and matches either title or author. Paginated listing returns `{ data, pagination: { page, limit, total, totalPages } }`.
+
+Send JWTs as `Authorization: Bearer <accessToken>`. Registration always assigns `PATRON`; it does not accept a role from the request. To authorize a librarian, an administrator must provision the `LIBRARIAN` role out of band in the trusted database. Tokens expire after one hour.
+
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Project setup
